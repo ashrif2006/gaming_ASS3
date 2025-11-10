@@ -1,0 +1,5 @@
+*.exe
+dic.txt
+.vscode/
+*.o
+*.obj
