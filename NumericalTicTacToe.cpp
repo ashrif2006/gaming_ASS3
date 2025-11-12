@@ -37,15 +37,15 @@ bool NumericalBoard::update_board(Move<int>* move) {
 bool NumericalBoard::is_win(Player<int>* player) {
     int target = 15; 
 
-  
+  // check rows
     for (int i = 0; i < 3; ++i)
         if (board[i][0] + board[i][1] + board[i][2] == target) return true;
 
-  
+  //check columns
     for (int j = 0; j < 3; ++j)
         if (board[0][j] + board[1][j] + board[2][j] == target) return true;
 
-  
+  //check diagonals
     if (board[0][0] + board[1][1] + board[2][2] == target) return true;
     if (board[0][2] + board[1][1] + board[2][0] == target) return true;
 
@@ -70,6 +70,7 @@ bool NumericalBoard::game_is_over(Player<int>* player) {
 /////////////////////////////
 
 NumericalUI::NumericalUI() : UI<int>("Welcome to Numerical Tic-Tac-Toe!", 3) {}
+
 Move<int>* NumericalUI::get_move(Player<int>* player) {
     int x, y, val;
 
@@ -85,20 +86,39 @@ Move<int>* NumericalUI::get_move(Player<int>* player) {
             cin >> x;
             cout << "Enter column (0-2): ";
             cin >> y;
+
+            if (x < 0 || x > 2 || y < 0 || y > 2) {
+                cout << "Invalid coordinates! Must be between 0-2. Try again.\n";
+                continue;
+            }
             cout << "Enter number to place: ";
             cin >> val;
 
-            bool valid_number = false;
-            if (player->get_symbol() % 2 == 1) { 
-                valid_number = (find(odd_numbers.begin(), odd_numbers.end(), val) != odd_numbers.end());
-            } else { 
-                valid_number = (find(even_numbers.begin(), even_numbers.end(), val) != even_numbers.end());
+            bool isPlayer1 = (player->get_symbol() == 'X');  // Check if this is Player X
+
+            if (isPlayer1) {
+                // Player 1 = odd numbers
+                if (val == 1 || val == 3 || val == 5 || val == 7 || val == 9) {
+                    break;
+                }
+                else {
+                    cout << "Player 1 must use odd numbers (1,3,5,7,9)! Try again.\n";
+                }
+            }
+            else {
+                // Player 2 = even numbers  
+                if (val == 2 || val == 4 || val == 6 || val == 8) {
+                    break;
+                }
+                else {
+                    cout << "Player 2 must use even numbers (2,4,6,8)! Try again.\n";
+                }
             }
 
             // تحقق من أن الخانة فارغة
             bool empty_cell = (player->get_board_ptr()->get_board_matrix()[x][y] == 0);
 
-            if (valid_number && empty_cell) break;
+            if (empty_cell) break;
 
             cout << "Invalid move! Number or cell is not allowed. Try again.\n";
         }
@@ -107,7 +127,7 @@ Move<int>* NumericalUI::get_move(Player<int>* player) {
         auto boardMatrix = player->get_board_ptr()->get_board_matrix();
 
         // اختار مجموعة الأرقام حسب اللاعب
-        vector<int> available_numbers = (player->get_symbol() % 2 == 1) ? odd_numbers : even_numbers;
+        vector<int> available_numbers = (player->get_symbol() == 'X') ? odd_numbers : even_numbers;
 
         // احذف الأرقام المستخدمة بالفعل على اللوح
         for (int i = 0; i < 3; ++i)
