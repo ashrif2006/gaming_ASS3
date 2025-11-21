@@ -1,5 +1,6 @@
-#include <iostream>
+ #include <iostream>
 #include "NumericalTicTacToe.h"
+#include "MisereTicTacToe.h" //5
 
 using namespace std;
 
@@ -8,7 +9,9 @@ void menu() {
     do {
         cout << "Welcome To My World\n";
         cout << "\t1- Numerical Tic-Tac-Toe\n";
-        cout << "\t2- Game2\n";
+        cout << "\t2- Misere Tic-Tac-Toe\n";
+        cout << "\t3- Game2\n";
+        cout << "\t4- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -27,6 +30,23 @@ void menu() {
                 delete ui;
                 delete[] players;
                 break;
+            }
+             case 2: {
+                MisereBoard* board = new MisereBoard();
+                MisereUI* ui = new MisereUI();
+                Player<char>** players = ui->setup_players();
+
+                GameManager<char> gm(board, players, ui);
+                gm.run();
+
+                delete board;
+                delete ui;
+                delete[] players;
+                break;
+            }
+            case 3: {
+                cout << "Goodbye!\n";
+                return;
             }
             default:
                 cout << "Game not implemented yet.\n";
