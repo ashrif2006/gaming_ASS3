@@ -1,6 +1,7 @@
  #include <iostream>
 #include "NumericalTicTacToe.h"
 #include "MisereTicTacToe.h" //5
+#include "FourByFourTicTacToe.h"// 7
 
 using namespace std;
 
@@ -10,8 +11,9 @@ void menu() {
         cout << "Welcome To My World\n";
         cout << "\t1- Numerical Tic-Tac-Toe\n";
         cout << "\t2- Misere Tic-Tac-Toe\n";
-        cout << "\t3- Game2\n";
-        cout << "\t4- Exit\n";
+        cout << "\t3- 4x4 Tic-Tac-Toe\n";
+        cout << "\t4- Goodby\n";
+        cout << "\t5- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -45,6 +47,19 @@ void menu() {
                 break;
             }
             case 3: {
+                FourByFourBoard* board = new FourByFourBoard();
+                FourByFourUI* ui = new FourByFourUI();
+                Player<char>** players = ui->setup_players();
+
+                GameManager<char> gm(board, players, ui);
+                gm.run();
+
+                delete board;
+                delete ui;
+                delete[] players;
+                break;
+            }
+            case 4: {
                 cout << "Goodbye!\n";
                 return;
             }
