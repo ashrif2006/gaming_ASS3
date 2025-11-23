@@ -2,6 +2,7 @@
 #include "NumericalTicTacToe.h"
 #include "MisereTicTacToe.h" //5
 #include "FourByFourTicTacToe.h"// 7
+#include "PyramidTicTacToe.h" // 8
 
 using namespace std;
 
@@ -12,8 +13,9 @@ void menu() {
         cout << "\t1- Numerical Tic-Tac-Toe\n";
         cout << "\t2- Misere Tic-Tac-Toe\n";
         cout << "\t3- 4x4 Tic-Tac-Toe\n";
-        cout << "\t4- Goodby\n";
-        cout << "\t5- Exit\n";
+        cout << "\t4- Pyramid Tic-Tac-Toe\n";
+        cout << "\t5- Goodby\n";
+        cout << "\t6- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -60,6 +62,19 @@ void menu() {
                 break;
             }
             case 4: {
+                PyramidBoard* board = new PyramidBoard();
+                PyramidUI* ui = new PyramidUI();
+                Player<char>** players = ui->setup_players();
+
+                GameManager<char> gm(board, players, ui);
+                gm.run();
+
+                delete board;
+                delete ui;
+                delete[] players;
+                break;
+            }
+            case 5: {
                 cout << "Goodbye!\n";
                 return;
             }
