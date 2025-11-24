@@ -4,6 +4,7 @@
 #include "FourByFourTicTacToe.h" // 7
 #include "PyramidTicTacToe.h"    // 8
 #include "sus.h"                 //1
+#include "InfinityTicTacToe.h"   // 11
 
 using namespace std;
 
@@ -18,6 +19,7 @@ void menu()
         cout << "\t3- 4x4 Tic-Tac-Toe\n";
         cout << "\t4- Pyramid Tic-Tac-Toe\n";
         cout << "\t5- S U S\n";
+		cout << "\t11- Infinity Tic-Tac-Toe\n";
         cout << "\t6- Goodby\n";
         cout << "\t7- Exit\n";
 
@@ -110,7 +112,18 @@ void menu()
             delete[] players;
             break;
         }
-
+        case 11:
+        {
+            InfinityTicTacToe *board = new InfinityTicTacToe();
+            InfinityTicTacToeUI *ui = new InfinityTicTacToeUI();
+            Player<char> **players = ui->setup_players();
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+            delete board;
+            delete ui;
+            delete[] players;
+            break;
+		}
         case 6:
         {
             cout << "Goodbye!\n";
