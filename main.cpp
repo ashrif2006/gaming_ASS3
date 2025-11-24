@@ -5,7 +5,7 @@
 #include "PyramidTicTacToe.h"    // 8
 #include "sus.h"                 //1
 #include "InfinityTicTacToe.h"   // 11
-#include "FiveByFiveTicTacToe.h" // 3
+#include "FourInARow.h"          // 2
 
 using namespace std;
 
@@ -20,10 +20,10 @@ void menu()
         cout << "\t3- 4x4 Tic-Tac-Toe\n";
         cout << "\t4- Pyramid Tic-Tac-Toe\n";
         cout << "\t5- S U S\n";
-        cout << "\t6- 5x5 Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
-        cout << "\t7- Goodby\n";
-        cout << "\t8- Exit\n";
+        cout << "\t12- Four In A Row\n";
+        cout << "\t6- Goodby\n";
+        cout << "\t7- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -92,42 +92,14 @@ void menu()
             SusBoard *board = new SusBoard();
             SusUI *ui = new SusUI();
             Player<char> **players = ui->setup_players();
-
             GameManager<char> gm(board, players, ui);
             gm.run();
-            cout << "\nFinal Scores:\n";
-            for (int i = 0; i < 2; i++)
-            {
-                cout << players[i]->get_name() << ": "
-                     << board->get_player_score(i) << " points\n";
-            }
-
-            if (board->is_win(players[0]))
-                cout << players[0]->get_name() << " wins!\n";
-            else if (board->is_win(players[1]))
-                cout << players[1]->get_name() << " wins!\n";
-            else
-                cout << "Draw!\n";
-
+            ui->display_final_results(board, players);
             delete board;
             delete ui;
             delete[] players;
             break;
-        }
-        case 6:
-        {
-            FiveByFiveBoard* board = new FiveByFiveBoard();
-            FiveByFiveUI* ui = new FiveByFiveUI();
-            Player<char>** players = ui->setup_players();
-
-            GameManager<char> gm(board, players, ui);
-            gm.run();
-
-            delete board;
-            delete ui;
-            delete[] players;
-            break;
-        }
+		}
         case 11:
         {
             InfinityTicTacToe *board = new InfinityTicTacToe();
@@ -140,7 +112,20 @@ void menu()
             delete[] players;
             break;
 		}
-        case 7:
+        case 12:
+        {
+            FourInARowBoard *board = new FourInARowBoard();
+            FourInARowUI *ui = new FourInARowUI();
+            Player<char> **players = ui->setup_players();
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+            delete board;
+            delete ui;
+            delete[] players;
+            break;
+		}
+
+        case 6:
         {
             cout << "Goodbye!\n";
             return;

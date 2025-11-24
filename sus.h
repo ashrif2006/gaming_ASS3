@@ -1,28 +1,9 @@
-/*
-            SusBoard *board = new SusBoard();
-            SusUI *ui = new SusUI();
-            Player<char> **players = ui->setup_players();
-
-            GameManager<char> gm(board, players, ui);
-            gm.run();
-            cout << "\nFinal Scores:\n";
-            for (int i = 0; i < 2; i++)
-            {
-                cout << players[i]->get_name() << ": "
-                     << board->get_player_score(i) << " points\n";
-            }
-  
-            if (board->is_win(players[0]))
-                cout << players[0]->get_name() << " wins!\n";
-            else if (board->is_win(players[1]))
-                cout << players[1]->get_name() << " wins!\n";
-            else
-                cout << "Draw!\n";
-
-            delete board;
-            delete ui;
-            delete[] players;
-            break;
+﻿/*
+* المشكله 
+            SUS
+ Introduction: A game on a 3x3 grid where the objective is to form the sequence "S-U-S".  Board: A 3x3 grid.  Rules: Players take turns placing either an "S" or a "U" in an empty square. A player must use the same
+letter each turn. A player scores a point for each "S-U-S" sequence they create.  Winning Condition: The game ends when the board is full. The player who has created the most "S-U-S"
+sequences wins.
 
 */
 
@@ -62,6 +43,8 @@ public:
     Move<char>* get_move(Player<char>* player) override;
     Player<char>* create_player(string& name, char symbol, PlayerType type);
     Player<char>** setup_players() override;
+	//داله لعرض النتائج النهائيه
+    void display_final_results(Board<char>* board, Player<char>** players);
 };
 
 #endif
