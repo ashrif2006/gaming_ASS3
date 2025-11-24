@@ -5,8 +5,6 @@
 #include "PyramidTicTacToe.h"    // 8
 #include "sus.h"                 //1
 #include "InfinityTicTacToe.h"   // 11
-#include "FourInARow.h"          // 2
-#include "FiveByFiveTicTacToe.h" // 3
 
 using namespace std;
 
@@ -102,19 +100,6 @@ void menu()
             delete[] players;
             break;
 		}
-        case 6:
-        {
-            FiveByFiveBoard* board = new FiveByFiveBoard();
-            FiveByFiveUI* ui = new FiveByFiveUI();
-            Player<char>** players = ui->setup_players();
-            GameManager<char> gm(board, players, ui);
-            gm.run();
-            delete board;
-            delete ui;
-            delete[] players;
-            break;
-		}
-
         case 11:
         {
             InfinityTicTacToe *board = new InfinityTicTacToe();
