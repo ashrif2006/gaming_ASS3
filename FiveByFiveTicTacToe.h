@@ -13,10 +13,10 @@ private:
 public:
     FiveByFiveBoard();
 
-    bool update_board(int x, int y, char symbol);  
-    bool is_winner();                              
-    bool is_draw();                                
-    bool game_is_over();                          
+    // Virtual functions from Board<char> - EXACT signatures from base class
+    bool update_board(Move<char>* move) override;
+    bool is_draw(Player<char>* player) override;
+    bool game_is_over(Player<char>* player) override;
 
     // Your custom functions
     void display_board();
@@ -33,8 +33,7 @@ public:
     FiveByFiveUI();
     Move<char>* get_move(Player<char>* player) override;
     Player<char>* create_player(std::string& name, char symbol, PlayerType type) override;
-
-    void display_board(Board<char>* board);        
-    void display_message(const std::string& message); 
+    void display_board(Board<char>* board) override;
+    void display_message(const std::string& message) override;
 };
 #endif

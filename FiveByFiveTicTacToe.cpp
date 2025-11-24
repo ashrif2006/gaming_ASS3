@@ -17,7 +17,11 @@ FiveByFiveBoard::FiveByFiveBoard() : Board<char>(5, 5), currentPlayer('X'), n_mo
 }
 
 // Virtual function from Board<char>
-bool FiveByFiveBoard::update_board(int x, int y, char symbol) {
+bool FiveByFiveBoard::update_board(Move<char>* move) {
+    int x = move->get_x();
+    int y = move->get_y();
+    char symbol = move->get_symbol();
+
     if (x < 0 || x >= 5 || y < 0 || y >= 5 || board[x][y] != ' ') {
         return false;
     }
@@ -28,7 +32,22 @@ bool FiveByFiveBoard::update_board(int x, int y, char symbol) {
     return true;
 }
 
-// Virtual function from Board<char>
+bool FiveByFiveBoard::is_draw(Player<char>* player) {
+    if (n_moves < 24) return false;
+
+    char player_symbol = player->get_symbol();
+    char opponent_symbol = (player_symbol == 'X') ? 'O' : 'X';
+
+    int player_score = count_three_in_row(player_symbol);
+    int opponent_score = count_three_in_row(opponent_symbol);
+
+    return player_score == opponent_score;
+}
+
+bool FiveByFiveBoard::game_is_over(Player<char>* player) {
+    return n_moves >= 24;
+}
+
 void FiveByFiveBoard::display_board() {
     cout << "\n   0   1   2   3   4\n";
     cout << "  +---+---+---+---+---+\n";
@@ -43,29 +62,7 @@ void FiveByFiveBoard::display_board() {
     cout << "Moves: " << n_moves << "/24 | Current Player: " << currentPlayer << endl;
 }
 
-// Virtual function from Board<char>
-bool FiveByFiveBoard::is_winner() {
-    // This is called by the framework - use your logic
-    if (n_moves < 24) return false;
 
-    // For the framework, we need to determine if there's a winner
-    // Since both players can't win, return true if either has more points
-    int x_score = count_three_in_row('X');
-    int o_score = count_three_in_row('O');
-    return x_score != o_score; // There's a winner if scores are not equal
-}
-
-// Virtual function from Board<char>
-bool FiveByFiveBoard::is_draw() {
-    return n_moves >= 24 && count_three_in_row('X') == count_three_in_row('O');
-}
-
-// Virtual function from Board<char>
-bool FiveByFiveBoard::game_is_over() {
-    return n_moves >= 24;
-}
-
-// Your custom functions - no override
 bool FiveByFiveBoard::is_win(Player<char>* player) {
     if (n_moves < 24) return false;
 
