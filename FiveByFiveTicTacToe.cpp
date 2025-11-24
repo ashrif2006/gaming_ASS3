@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FiveByFiveBoard::FiveByFiveBoard() : Board<char>(5, 5), currentPlayer('X'), n_moves(0) {
+FiveByFiveBoard::FiveByFiveBoard() : Board<char>(5, 5), currentPlayer('X') {
     board = {
         {' ', ' ', ' ',' ',' '},
         {' ', ' ', ' ',' ',' '},
@@ -32,37 +32,6 @@ bool FiveByFiveBoard::update_board(Move<char>* move) {
     return true;
 }
 
-bool FiveByFiveBoard::is_draw(Player<char>* player) {
-    if (n_moves < 24) return false;
-
-    char player_symbol = player->get_symbol();
-    char opponent_symbol = (player_symbol == 'X') ? 'O' : 'X';
-
-    int player_score = count_three_in_row(player_symbol);
-    int opponent_score = count_three_in_row(opponent_symbol);
-
-    return player_score == opponent_score;
-}
-
-bool FiveByFiveBoard::game_is_over(Player<char>* player) {
-    return n_moves >= 24;
-}
-
-void FiveByFiveBoard::display_board() {
-    cout << "\n   0   1   2   3   4\n";
-    cout << "  +---+---+---+---+---+\n";
-
-    for (int i = 0; i < 5; i++) {
-        cout << i << " | ";
-        for (int j = 0; j < 5; j++) {
-            cout << board[i][j] << " | ";
-        }
-        cout << "\n  +---+---+---+---+---+\n";
-    }
-    cout << "Moves: " << n_moves << "/24 | Current Player: " << currentPlayer << endl;
-}
-
-
 bool FiveByFiveBoard::is_win(Player<char>* player) {
     if (n_moves < 24) return false;
 
@@ -86,6 +55,23 @@ bool FiveByFiveBoard::is_lose(Player<char>* player) {
 
     return player_score < player2_score;
 }
+
+bool FiveByFiveBoard::is_draw(Player<char>* player) {
+    if (n_moves < 24) return false;
+
+    char player_symbol = player->get_symbol();
+    char player2_symbol = (player_symbol == 'X') ? 'O' : 'X';
+
+    int player_score = count_three_in_row(player_symbol);
+    int player2_score = count_three_in_row(player2_symbol);
+
+    return player_score == player2_score;
+}
+
+bool FiveByFiveBoard::game_is_over(Player<char>* player) {
+    return n_moves >= 24;
+}
+
 
 int FiveByFiveBoard::count_three_in_row(char symbol) {
     int count = 0;
@@ -200,13 +186,3 @@ Player<char>* FiveByFiveUI::create_player(std::string& name, char symbol, Player
     return new Player<char>(name, symbol, type);
 }
 
-void FiveByFiveUI::display_board(Board<char>* board) {
-    FiveByFiveBoard* fiveByFiveBoard = dynamic_cast<FiveByFiveBoard*>(board);
-    if (fiveByFiveBoard) {
-        fiveByFiveBoard->display_board();
-    }
-}
-
-void FiveByFiveUI::display_message(const std::string& message) {
-    cout << message << endl;
-}

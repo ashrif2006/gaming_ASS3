@@ -24,8 +24,8 @@ void menu()
 		cout << "\t6- 5x5 Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
         cout << "\t12- Four In A Row\n";
-        cout << "\t6- Goodby\n";
-        cout << "\t7- Exit\n";
+        cout << "\t13- Goodby\n";
+        cout << "\t14- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -140,7 +140,7 @@ void menu()
             break;
 		}
 
-        case 7:
+        case 13:
         {
             cout << "Goodbye!\n";
             return;
