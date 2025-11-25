@@ -1,6 +1,7 @@
 #include <iostream>
 #include "NumericalTicTacToe.h"
 #include "MisereTicTacToe.h"     //5
+#include "DiamondTicTacToe.h"    //6
 #include "FourByFourTicTacToe.h" // 7
 #include "PyramidTicTacToe.h"    // 8
 #include "sus.h"                 //1
@@ -22,6 +23,7 @@ void menu()
         cout << "\t4- Pyramid Tic-Tac-Toe\n";
         cout << "\t5- S U S\n";
 		cout << "\t6- 5x5 Tic-Tac-Toe\n";
+        cout << "\t7- Diamond Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
         cout << "\t12- Four In A Row\n";
         cout << "\t13- Goodby\n";
@@ -114,6 +116,21 @@ void menu()
             delete[] players;
             break;
 		}
+       case 7:
+        {
+            DiamondBoard *board = new DiamondBoard();
+            DiamondUI *ui = new DiamondUI();
+            Player<char> **players = ui->setup_players();
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+            ui->display_final_results(board, players);
+            delete board;
+            delete ui;
+            delete players[0];
+            delete players[1];
+            delete[] players;
+            break;
+        }
 
         case 11:
         {
