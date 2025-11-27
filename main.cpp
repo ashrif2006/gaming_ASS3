@@ -118,7 +118,7 @@ void menu()
             delete[] players;
             break;
 		}
-       case 7:
+        case 7:
         {
             DiamondBoard *board = new DiamondBoard();
             DiamondUI *ui = new DiamondUI();
@@ -128,8 +128,6 @@ void menu()
             ui->display_final_results(board, players);
             delete board;
             delete ui;
-            delete players[0];
-            delete players[1];
             delete[] players;
             break;
         }

@@ -1,34 +1,29 @@
  #include "DiamondTicTacToe.h"
-#include <iomanip>
-#include <limits>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
 
 DiamondBoard::DiamondBoard() : Board<char>(5, 5), currentPlayer('X') {
-    // نعمل الشكل الماسي - بنحط '.' في الخلايا الي مش فعالة
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
-            if ((i == 0 && j != 2) || (i == 1 && (j < 1 || j > 3)) || (i == 3 && (j < 1 || j > 3)) || (i == 4 && j != 2)) {
-                board[i][j] = '.';  // خلية مش فعالة
+            if ((i == 0 && j != 2) ||  (i == 1 && (j < 1 || j > 3)) ||  (i == 3 && (j < 1 || j > 3)) ||  (i == 4 && j != 2)) {
+                board[i][j] = '.';  // خلية غير فعالة
             } else {
-                board[i][j] = ' ';  // خلية فعالة وفاضية
+                board[i][j] = ' ';  // خلية فعالة
             }
         }
     }
 }
-
 bool DiamondBoard::is_valid_position(int row, int col) const {
-    // نتأكد إن الإحداثيات within range وإن الخلية مش '.' 
-    if (row < 0 || row >= 5 || col < 0 || col >= 5) {
-        return false;
-    }
+    if (row < 0 || row >= 5 || col < 0 || col >= 5) return false;
     return board[row][col] != '.';
 }
-
 bool DiamondBoard::update_board(Move<char>* move) {
     int row = move->get_x();
     int col = move->get_y();
     char symbol = move->get_symbol();
     
-    // نتأكد إن المكان صح وفاضي
     if (!is_valid_position(row, col) || board[row][col] != ' ') {
         delete move;
         return false;
@@ -41,93 +36,59 @@ bool DiamondBoard::update_board(Move<char>* move) {
     return true;
 }
 
-bool DiamondBoard::check_line(int startRow, int startCol, int deltaRow, int deltaCol, int length, char player) const {
-    // نتحقق من خط بطول معين في اتجاه معين
-    for (int i = 0; i < length; i++) {
-        int row = startRow + i * deltaRow;
-        int col = startCol + i * deltaCol;
-        
-        if (row < 0 || row >= 5 || col < 0 || col >= 5 || board[row][col] != player) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool DiamondBoard::check_three_in_line(char player) const {
-    // نتحقق من كل الخطوط الممكنة طولها 3
-    vector<pair<int, int>> directions = {
-        {0, 1},   // أفقي
-        {1, 0},   // رأسي  
-        {1, 1},   // قطري
-        {1, -1}   // قطري عكسي
-    };
+bool DiamondBoard::is_win(Player<char>* player) {
+    char symbol = player->get_symbol();
     
+    // نتحقق من خط 3 و خط 4 في نفس الوقت
+    bool has_three = false;
+    bool has_four = false;
+    
+    // اتجاهات الخطوط
+    int dirs[4][2] = {{0,1}, {1,0}, {1,1}, {1,-1}};
+    
+    // نتحقق من كل الخطوط الممكنة
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             if (!is_valid_position(i, j)) continue;
             
-            for (auto& dir : directions) {
-                if (check_line(i, j, dir.first, dir.second, 3, player)) {
-                    return true;
+            for (auto& dir : dirs) {
+                int dr = dir[0], dc = dir[1];
+                
+                // تحقق من خط طوله 3
+                if (i + 2*dr < 5 && j + 2*dc < 5 && j + 2*dc >= 0) {
+                    if (board[i][j] == symbol && 
+                        board[i+dr][j+dc] == symbol && 
+                        board[i+2*dr][j+2*dc] == symbol) {
+                        has_three = true;
+                    }
+                }
+                
+                // تحقق من خط طوله 4  
+                if (i + 3*dr < 5 && j + 3*dc < 5 && j + 3*dc >= 0) {
+                    if (board[i][j] == symbol && 
+                        board[i+dr][j+dc] == symbol && 
+                        board[i+2*dr][j+2*dc] == symbol &&
+                        board[i+3*dr][j+3*dc] == symbol) {
+                        has_four = true;
+                    }
                 }
             }
         }
     }
-    return false;
-}
-
-bool DiamondBoard::check_four_in_line(char player) const {
-    // نتحقق من الخطوط الأفقية
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j <= 1; j++) {
-            if (check_line(i, j, 0, 1, 4, player)) return true;
-        }
-    }
     
-    // نتحقق من الخطوط الرأسية  
-    for (int j = 0; j < 5; j++) {
-        for (int i = 0; i <= 1; i++) {
-            if (check_line(i, j, 1, 0, 4, player)) return true;
-        }
-    }
-    
-    // نتحقق من الخطوط القطرية
-    for (int i = 0; i <= 1; i++) {
-        for (int j = 0; j <= 1; j++) {
-            if (check_line(i, j, 1, 1, 4, player)) return true;
-        }
-    }
-    
-    // نتحقق من الخطوط القطرية العكسية
-    for (int i = 0; i <= 1; i++) {
-        for (int j = 3; j <= 4; j++) {
-            if (check_line(i, j, 1, -1, 4, player)) return true;
-        }
-    }
-    
-    return false;
-}
-
-bool DiamondBoard::is_win(Player<char>* player) {
- // شرط الفوز: لازم يكون عندك خط 3 وخط 4 في نفس الوقت
-    char symbol = player->get_symbol();
-    return check_three_in_line(symbol) && check_four_in_line(symbol);
+    return has_three && has_four;
 }
 
 bool DiamondBoard::is_lose(Player<char>* player) {
-    // لو الخصم كسب، يبقى انت خسرت
-    char opponentSymbol = (player->get_symbol() == 'X') ? 'O' : 'X';
-    return check_three_in_line(opponentSymbol) && check_four_in_line(opponentSymbol);
+    char opponent = (player->get_symbol() == 'X') ? 'O' : 'X';
+    Player<char> temp("temp", opponent, PlayerType::HUMAN);
+    return is_win(&temp);
 }
 
 bool DiamondBoard::is_draw(Player<char>* player) {
-    // نتأكد إن اللوحة مليانة ومفيش حد كسب
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
-            if (board[i][j] == ' ') {
-                return false;
-            }
+            if (board[i][j] == ' ') return false;
         }
     }
     return !is_win(player) && !is_lose(player);
@@ -140,26 +101,41 @@ bool DiamondBoard::game_is_over(Player<char>* player) {
 // DiamondUI implementation
 DiamondUI::DiamondUI() : UI<char>("=== Diamond Tic-Tac-Toe ===", 3) {}
 
+Player<char>** DiamondUI::setup_players() {
+    Player<char>** players = new Player<char>*[2];
+    vector<string> type_options = { "Human", "Computer" };
+
+    string nameX = get_player_name("Player X");
+    PlayerType typeX = get_player_type_choice("Player X", type_options);
+    players[0] = create_player(nameX, 'X', typeX);
+
+    string nameO = get_player_name("Player O");
+    PlayerType typeO = get_player_type_choice("Player O", type_options);
+    players[1] = create_player(nameO, 'O', typeO);
+
+    return players;
+}
+
 Move<char>* DiamondUI::get_move(Player<char>* player) {
     int row, col;
-    bool valid_input = false;
     
-    while (!valid_input) {
-        cout << player->get_name() << "'s turn (symbol: " << player->get_symbol() << ")\n";
-        cout << "Enter row (0-4): ";
+    if (player->get_type() == PlayerType::COMPUTER) {
+        // حركة الكمبيوتر
+        srand(time(0));
+        Board<char>* gameBoard = player->get_board_ptr();
+        vector<vector<char>> currentBoard = gameBoard->get_board_matrix();
         
-        if (cin >> row) {
-            cout << "Enter column (0-4): ";
-            if (cin >> col) {
-                valid_input = true;
-            }
-        }
-        
-        if (!valid_input) {
-            cout << "Invalid input! Please enter numbers only.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
+        do {
+            row = rand() % 5;
+            col = rand() % 5;
+        } while (!dynamic_cast<DiamondBoard*>(gameBoard)->is_valid_position(row, col) || 
+                 currentBoard[row][col] != ' ');
+        cout << "Computer plays at (" << row << ", " << col << ")\n";
+    } else {
+        // حركة الإنسان
+        cout << player->get_name() << "'s turn (" << player->get_symbol() << ")\n";
+        cout << "Enter row and column (0-4): ";
+        cin >> row >> col;
     }
     
     return new Move<char>(row, col, player->get_symbol());
@@ -171,8 +147,6 @@ Player<char>* DiamondUI::create_player(string& name, char symbol, PlayerType typ
 
 void DiamondUI::display_final_results(Board<char>* board, Player<char>* players[2]) {
     cout << "\n=== Game Over ===\n";
-    
-    // Display final board
     display_board_matrix(board->get_board_matrix());
     
     for (int i = 0; i < 2; i++) {
