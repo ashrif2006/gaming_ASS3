@@ -8,6 +8,7 @@
 #include "FourByFourTicTacToe.h" // 7
 #include "PyramidTicTacToe.h"    // 8
 #include "InfinityTicTacToe.h"   // 11
+#include "MemoryTicTacToe.h"     //13
 
 using namespace std;
 
@@ -26,8 +27,9 @@ void menu()
         cout << "\t7- 5x5 Tic-Tac-Toe\n";
         cout << "\t8- Word Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
-        cout << "\t12- Goodby\n";
-        cout << "\t13- Exit\n";
+        cout << "\t12- Memory Tic-Tac-Toe (Bonus)\n";
+        cout << "\t13- Goodby\n";
+        cout << "\t14- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -154,6 +156,18 @@ void menu()
             break;
 		}
         case 12:
+        {
+            MemoryBoard* board = new MemoryBoard();
+            MemoryTicTacToeUI* ui = new MemoryTicTacToeUI();
+            Player<char>** players = ui->setup_players();
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+            delete board;
+            delete ui;
+            delete[] players;
+            break;
+        }
+        case 13:
         {
             cout << "Goodbye!\n";
             return;

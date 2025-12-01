@@ -114,6 +114,10 @@ int FiveByFiveBoard::count_three_in_row(char symbol) {
     return count;
 }
 
+/////////////////////////////
+// FiveByFive UI
+/////////////////////////////
+
 FiveByFiveUI::FiveByFiveUI() : UI<char>("Welcome to 5x5 Tic-Tac-Toe!", 6) {}
 
 Move<char>* FiveByFiveUI::get_move(Player<char>* player) {

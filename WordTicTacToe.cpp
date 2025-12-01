@@ -40,6 +40,7 @@ bool WordBoard::load_dictionary(const string& filename) {
         dictLoaded = true;
         return true;
     }
+   
 }
 
 bool WordBoard::is_valid_word(const string& word) {
@@ -117,6 +118,10 @@ bool WordBoard::game_is_over(Player<char>* player) {
     return checkAllWords() || (n_moves >=9);
 }
 
+/////////////////////////////
+// Word UI
+/////////////////////////////
+
 WordTicTacToeUI::WordTicTacToeUI() : UI<char>("Welcome to Word Tic-Tac-Toe!", 4) {}
 
 Move<char>* WordTicTacToeUI::get_move(Player<char>* player) {
@@ -148,8 +153,10 @@ Move<char>* WordTicTacToeUI::get_move(Player<char>* player) {
             }
             cout << endl;
 
-            cout << "Enter position (row column): ";
-            cin >> x >> y;
+            cout << "Enter position (row): ";
+            cin >> x;
+			cout << "Enterposition (column): ";
+			cin >> y;
 
             if (x < 0 || x >= 3 || y < 0 || y >= 3) {
                 cout << "Invalid coordinates! Please enter numbers between 0 and 2.\n";
