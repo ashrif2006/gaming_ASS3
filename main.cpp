@@ -1,14 +1,13 @@
 #include <iostream>
 #include "NumericalTicTacToe.h"
-#include "sus.h"                 //1
-#include "FourInARow.h"           //2
-#include"FiveByFiveTicTacToe.h" //3
-#include "WordTicTacToe.h"   //4
 #include "MisereTicTacToe.h"     //5
+#include "DiamondTicTacToe.h"    //6
+#include "ObstaclesTicTacToe.h"  //10
 #include "FourByFourTicTacToe.h" // 7
 #include "PyramidTicTacToe.h"    // 8
+#include "sus.h"                 //1
 #include "InfinityTicTacToe.h"   // 11
-#include "MemoryTicTacToe.h"     //13
+#include "FiveByFiveTicTacToe.h" // 9
 
 using namespace std;
 
@@ -23,13 +22,12 @@ void menu()
         cout << "\t3- 4x4 Tic-Tac-Toe\n";
         cout << "\t4- Pyramid Tic-Tac-Toe\n";
         cout << "\t5- S U S\n";
-		cout << "\t6- Four In A Row\n";
-        cout << "\t7- 5x5 Tic-Tac-Toe\n";
-        cout << "\t8- Word Tic-Tac-Toe\n";
+		cout << "\t6- 5x5 Tic-Tac-Toe\n";
+        cout << "\t7- Diamond Tic-Tac-Toe\n";
+        cout << "\t10- Obstacles Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
-        cout << "\t12- Memory Tic-Tac-Toe (Bonus)\n";
-        cout << "\t13- Goodby\n";
-        cout << "\t14- Exit\n";
+        cout << "\t12- Goodby\n";
+        cout << "\t13- Exit\n";
 
         int choice;
         cout << "Please Enter Your Choice: ";
@@ -105,20 +103,8 @@ void menu()
             delete ui;
             delete[] players;
             break;
-        }
-        case 6: 
-        {
-            FourInARowBoard *board = new FourInARowBoard();
-            FourInARowUI *ui = new FourInARowUI();
-            Player<char> **players = ui->setup_players();
-            GameManager<char> gm(board, players, ui);
-            gm.run();
-            delete board;
-            delete ui;
-            delete[] players;
-			break;
-        }
-        case 7:
+		}
+        case 6:
         {
             FiveByFiveBoard* board = new FiveByFiveBoard();
             FiveByFiveUI* ui = new FiveByFiveUI();
@@ -129,20 +115,36 @@ void menu()
             delete ui;
             delete[] players;
             break;
-        }
-
-        case 8: 
+		}
+        case 7:
         {
-            WordBoard* board = new WordBoard();
-            WordTicTacToeUI* ui = new WordTicTacToeUI();
-            Player<char>** players = ui->setup_players();
+            DiamondBoard *board = new DiamondBoard();
+            DiamondUI *ui = new DiamondUI();
+            Player<char> **players = ui->setup_players();
             GameManager<char> gm(board, players, ui);
             gm.run();
+            ui->display_final_results(board, players);
             delete board;
             delete ui;
             delete[] players;
             break;
         }
+        case 10:
+        {
+            ObstaclesTicTacToeBoard *board = new ObstaclesTicTacToeBoard();
+            ObstaclesTicTacToeUI *ui = new ObstaclesTicTacToeUI();
+            Player<char> **players = ui->setup_players();
+
+            // استخدم الـ GameManager العادي
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+
+            delete board;
+            delete ui;
+            delete[] players;
+            break;
+        }
+
         case 11:
         {
             InfinityTicTacToe *board = new InfinityTicTacToe();
@@ -155,19 +157,8 @@ void menu()
             delete[] players;
             break;
 		}
+        
         case 12:
-        {
-            MemoryBoard* board = new MemoryBoard();
-            MemoryTicTacToeUI* ui = new MemoryTicTacToeUI();
-            Player<char>** players = ui->setup_players();
-            GameManager<char> gm(board, players, ui);
-            gm.run();
-            delete board;
-            delete ui;
-            delete[] players;
-            break;
-        }
-        case 13:
         {
             cout << "Goodbye!\n";
             return;

@@ -1,6 +1,7 @@
 ﻿
 #include "sus.h"
 #include <cctype>
+#include<limits>
 SusBoard::SusBoard() : Board<char>(3,3) {
 	for(int i=0;i<rows;i++)
 		for(int j=0;j<columns;j++)
