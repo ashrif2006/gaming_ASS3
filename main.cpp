@@ -2,7 +2,7 @@
 #include "sus.h"                 //1
 #include "FourInARow.h"          //2
 #include "FiveByFiveTicTacToe.h" //3
-
+#include "WordTicTacToe.h"       //4
 #include "MisereTicTacToe.h"     //5
 #include "DiamondTicTacToe.h"    //6
 #include "FourByFourTicTacToe.h" //7
@@ -25,7 +25,7 @@ void menu()
         cout << "\t1- S U S\n";
         cout << "\t2- Four In A Row\n";
         cout << "\t3- 5x5 Tic-Tac-Toe\n";
-        
+		cout << "\t4- Word Tic-Tac-Toe\n";
         cout << "\t5- Misere Tic-Tac-Toe\n";
         cout << "\t6- Diamond Tic-Tac-Toe\n";
         cout << "\t7- 4x4 Tic-Tac-Toe\n";
@@ -82,7 +82,17 @@ void menu()
             break;
 		}
         case 4:
-        {}
+        {
+            WordBoard *board = new WordBoard();
+            WordTicTacToeUI *ui = new WordTicTacToeUI();
+            Player<char> **players = ui->setup_players();
+            GameManager<char> gm(board, players, ui);
+            gm.run();
+            delete board;
+            delete ui;
+            delete[] players;
+			break;
+        }
  
         case 5:
         {

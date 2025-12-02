@@ -26,21 +26,27 @@ WordBoard::WordBoard() : Board<char>(3, 3), currentPlayer('X') , dictLoaded(fals
 bool WordBoard::load_dictionary(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) {
-        return false;
+        return false; // Return false if the file cannot be opened
     }
 
     string word;
+    // Read ALL words from the file until the end
     while (file >> word) {
         transform(word.begin(), word.end(), word.begin(), ::toupper);
         if (word.length() == 3) {
             dictionary.insert(word);
         }
-
-        file.close();
-        dictLoaded = true;
-        return true;
     }
-   
+
+    if (file.fail() && !file.eof()) {
+        file.close();
+        return false;
+    }
+
+    // After successfully reading all words:
+    file.close();
+    dictLoaded = true;
+    return true; 
 }
 
 bool WordBoard::is_valid_word(const string& word) {
