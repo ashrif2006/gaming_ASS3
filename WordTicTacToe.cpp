@@ -36,7 +36,7 @@ bool WordBoard::load_dictionary(const string& filename) {
         if (word.length() == 3) {
             dictionary.insert(word);
         }  
-    }
+
     file.close();
     dictLoaded = true;
 
