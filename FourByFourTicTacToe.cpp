@@ -118,7 +118,9 @@ bool FourByFourBoard::game_is_over(Player<char>* player) {
     return is_win(player) || is_draw(player);
 }
 
-// تنفيذ واجهة المستخدم
+/////////////////////////////
+//FourByFour UI
+/////////////////////////////
 FourByFourUI::FourByFourUI() : UI<char>("4x4 Tic-Tac-Toe - Move your tokens to make 3 in a row!", 3) {}
 
 Move<char>* FourByFourUI::get_move(Player<char>* player) {

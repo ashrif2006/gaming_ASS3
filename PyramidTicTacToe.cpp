@@ -122,7 +122,9 @@ void PyramidBoard::display_pyramid() const {
     cout << "(2,0) (2,2) (2,4)\n";
 }
 
-// تنفيذ الـ UI
+/////////////////////////////
+//Pyramid UI
+/////////////////////////////
 PyramidUI::PyramidUI() : UI<char>("Welcome to Pyramid Tic-Tac-Toe!", 3) {}
 
 Move<char>* PyramidUI::get_move(Player<char>* player) {

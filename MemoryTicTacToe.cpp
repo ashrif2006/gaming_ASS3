@@ -115,8 +115,9 @@ char MemoryBoard::get_cell(int r, int c) const {
     return (r >= 0 && r < 3 && c >= 0 && c < 3) ? board[r][c] : ' ';
 }
 
-///////////////////////////////////////////////////
-
+/////////////////////////////
+// Memory UI
+/////////////////////////////
 MemoryTicTacToeUI::MemoryTicTacToeUI() : UI<char>("Memory Tic-Tac-Toe", 3) {}
 
 Move<char>* MemoryTicTacToeUI::get_move(Player<char>* player) {

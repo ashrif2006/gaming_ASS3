@@ -79,7 +79,10 @@ bool FourInARowBoard::is_draw(Player<char>* player) {
 bool FourInARowBoard::game_is_over(Player<char>* player) {
 	return is_win(player) || is_draw(player);
 }
-//////////////****UI****///////////////
+
+/////////////////////////////
+//FourInARow UI
+/////////////////////////////
 
 FourInARowUI::FourInARowUI() : UI<char>("Welcome to Four In A Row!", 7) {}
 Move<char>* FourInARowUI::get_move(Player<char>* player) {

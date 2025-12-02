@@ -108,7 +108,9 @@ bool InfinityTicTacToe::game_is_over(Player<char>* player) {
 	return is_win(player);
 }
 
-// UI Implementation
+/////////////////////////////
+// Infinity UI
+/////////////////////////////
 InfinityTicTacToeUI::InfinityTicTacToeUI() : UI<char>("Welcome to Infinity Tic-Tac-Toe!", 3) {}
 Move<char>* InfinityTicTacToeUI::get_move(Player<char>* player) {
 	char symbol = player->get_symbol();

@@ -73,7 +73,9 @@ void MisereBoard::display_board() {
         cout << "\n-------------\n";
     }
 }
-
+/////////////////////////////
+// Misere UI
+/////////////////////////////
 MisereUI::MisereUI() : UI<char>("Welcome to Misere Tic-Tac-Toe (Anti Tic-Tac-Toe)!", 3) {}
 
 Move<char>* MisereUI::get_move(Player<char>* player) {

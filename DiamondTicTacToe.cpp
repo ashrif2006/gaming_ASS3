@@ -98,7 +98,10 @@ bool DiamondBoard::game_is_over(Player<char>* player) {
     return is_win(player) || is_lose(player) || is_draw(player);
 }
 
-// DiamondUI implementation
+
+/////////////////////////////
+//Diamond UI
+/////////////////////////////
 DiamondUI::DiamondUI() : UI<char>("=== Diamond Tic-Tac-Toe ===", 3) {}
 
 Player<char>** DiamondUI::setup_players() {

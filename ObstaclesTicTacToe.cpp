@@ -102,7 +102,9 @@ bool ObstaclesTicTacToeBoard::game_is_over(Player<char>* player) {
     return is_win(player) || is_draw(player);
 }
 
- // UI Implementation
+/////////////////////////////
+// Obstacles UI
+/////////////////////////////
 ObstaclesTicTacToeUI::ObstaclesTicTacToeUI() : UI("Obstacles Tic-Tac-Toe", 3) {}
 
 Move<char>* ObstaclesTicTacToeUI::get_move(Player<char>* player) {

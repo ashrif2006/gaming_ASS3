@@ -93,6 +93,9 @@ bool SusBoard::game_is_over(Player<char>* player) {
 int SusBoard::get_player_score(int index) const {
 	return player_scores[index];
 }
+/////////////////////////////
+//SUS UI
+/////////////////////////////
 SusUI::SusUI(int cell_width) : UI<char>("S-U-S Game", 3) {}
 
 Move<char>* SusUI::get_move(Player<char>* player) {
@@ -116,8 +119,6 @@ Move<char>* SusUI::get_move(Player<char>* player) {
 
 	return new Move<char>(r, c, sym);
 }
-
-
 Player<char>* SusUI::create_player(string& name, char symbol, PlayerType type) {
 	return new Player<char>(name,symbol,type);
 }
