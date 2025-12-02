@@ -26,6 +26,7 @@ public:
     bool is_valid_word(const std::string& word);
     bool checkAllWords();
     char get_current_player() const { return currentPlayer; }
+    bool is_dict_loaded() const { return dictLoaded; }
 };
 
 class WordTicTacToeUI : public UI<char> {

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <cctype>
 
 using namespace std;
 
@@ -26,31 +27,31 @@ WordBoard::WordBoard() : Board<char>(3, 3), currentPlayer('X') , dictLoaded(fals
 bool WordBoard::load_dictionary(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) {
-        return false; // Return false if the file cannot be opened
+        return false;
     }
 
     string word;
-    // Read ALL words from the file until the end
     while (file >> word) {
         transform(word.begin(), word.end(), word.begin(), ::toupper);
         if (word.length() == 3) {
             dictionary.insert(word);
-        }
+        }  
     }
-
-    if (file.fail() && !file.eof()) {
-        file.close();
-        return false;
-    }
-
-    // After successfully reading all words:
     file.close();
     dictLoaded = true;
-    return true; 
+
+    return true;
+   
 }
 
 bool WordBoard::is_valid_word(const string& word) {
-    return dictionary.find(word) != dictionary.end();
+    if (word.length() != 3) return false;
+    for (char c : word) {
+        if (c == ' ') return false;
+    }
+    string upper_word = word;
+    transform(upper_word.begin(), upper_word.end(), upper_word.begin(), ::toupper);
+    return dictionary.find(upper_word) != dictionary.end();
 }
 
 bool WordBoard::update_board(Move<char>* move) {
@@ -64,7 +65,7 @@ bool WordBoard::update_board(Move<char>* move) {
 
     board[x][y] = symbol;
     n_moves++;
-    currentPlayer = (currentPlayer == 'X') ? 'Z' : 'X';
+    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     return true;
 }
 
@@ -101,8 +102,11 @@ bool WordBoard::checkAllWords() {
         word1 += board[i][i];
         word2 += board[i][2 - i];
 	}
-	return (word1[0] != ' ' && is_valid_word(word1)) || (word2[0] != ' ' && is_valid_word(word2));
+	//return (word1[0] != ' ' && is_valid_word(word1)) || (word2[0] != ' ' && is_valid_word(word2));
+    if (is_valid_word(word1)) return true;
+    if (is_valid_word(word2)) return true;
 
+    return false;
 }
 
 bool WordBoard::is_win(Player<char>* player) {

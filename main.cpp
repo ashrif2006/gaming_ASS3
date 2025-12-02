@@ -9,7 +9,11 @@
 #include "PyramidTicTacToe.h"    //8
 #include "NumericalTicTacToe.h"  //9
 #include "ObstaclesTicTacToe.h"  //10
-#include "InfinityTicTacToe.h"   //11
+#include "FourByFourTicTacToe.h" // 7
+#include "PyramidTicTacToe.h"    // 8
+#include "sus.h"                 //1
+#include "InfinityTicTacToe.h"   // 11
+#include "FiveByFiveTicTacToe.h" // 9
 
 #include "MemoryTicTacToe.h"     //13
 
@@ -33,6 +37,8 @@ void menu()
         cout << "\t9- Numerical Tic-Tac-Toe\n";
         cout << "\t10- Obstacles Tic-Tac-Toe\n";
 		cout << "\t11- Infinity Tic-Tac-Toe\n";
+        cout << "\t12- Goodby\n";
+        cout << "\t13- Exit\n";
 
         cout << "\t13- Memory Tic-Tac-Toe\n";
         cout << "\t14- Goodby\n";
@@ -208,8 +214,8 @@ void menu()
             delete ui;
             delete[] players;
             break;
-        }
-
+		}
+        
         case 14:
         {
             cout << "Goodbye!\n";
