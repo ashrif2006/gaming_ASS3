@@ -1,5 +1,7 @@
 ﻿#include "InfinityTicTacToe.h"
 #include <iostream>
+#include <limits>
+
 
 using namespace std;
 InfinityTicTacToe::InfinityTicTacToe() : Board<char>(3,3) {

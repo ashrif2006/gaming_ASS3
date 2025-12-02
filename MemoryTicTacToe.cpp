@@ -1,166 +1,171 @@
-include "MemoryTicTacToe.h"
-
+  #include "MemoryTicTacToe.h"
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include <cstdlib>
 #include <limits>
-
-
 using namespace std;
 
 MemoryBoard::MemoryBoard() : Board<char>(3, 3), currentPlayer('X') {
-    board = {
-        {' ', ' ', ' '},
-        {' ', ' ', ' '},
-        {' ', ' ', ' '}
-    };
-
-    revealed = {
-       {false, false, false},
-       {false, false, false},
-       {false, false, false}
-    };
+    board = {{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
+    revealed = {{false,false,false},{false,false,false},{false,false,false}};
 }
 
 bool MemoryBoard::update_board(Move<char>* move) {
-    int x = move->get_x();
-    int y = move->get_y();
+    int row = move->get_x();
+    int col = move->get_y();
     char symbol = move->get_symbol();
-    if (x < 0 || x >= 3 || y < 0 || y >= 3 || board[x][y] != ' ') {
+    if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ') 
         return false;
-    }
-    board[x][y] = symbol;
+    board[row][col] = symbol;
     n_moves++;
-
-	revealed[x][y] = true; // Mark the cell as revealed
     currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     return true;
 }
 
 bool MemoryBoard::is_win(Player<char>* player) {
-	char symbol = player->get_symbol();
-    
+    char s = player->get_symbol();
     for(int i = 0; i < 3; i++) {
-        if (board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol)
+        if(board[i][0] == s && board[i][1] == s && board[i][2] == s) 
             return true;
-        if (board[0][i] == symbol && board[1][i] == symbol && board[2][i] == symbol)
-            return true;
-	}
-
-    if(board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol)
-		return true;
-	if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)
-		return true;
-    return false;
-}
-bool MemoryBoard::is_lose(Player<char>* player) {
-	char player2_symbol = (player->get_symbol() == 'X') ? 'O' : 'X';    
-    for(int i = 0; i < 3; i++) {
-        if (board[i][0] == player2_symbol && board[i][1] == player2_symbol && board[i][2] == player2_symbol)
-            return true;
-        if (board[0][i] == player2_symbol && board[1][i] == player2_symbol && board[2][i] == player2_symbol)
+        if(board[0][i] == s && board[1][i] == s && board[2][i] == s) 
             return true;
     }
-    if(board[0][0] == player2_symbol && board[1][1] == player2_symbol && board[2][2] == player2_symbol)
-		return true;
-    if (board[0][2] == player2_symbol && board[1][1] == player2_symbol && board[2][0] == player2_symbol)
+    if(board[0][0] == s && board[1][1] == s && board[2][2] == s) 
+        return true;
+    if(board[0][2] == s && board[1][1] == s && board[2][0] == s) 
         return true;
     return false;
 }
-bool MemoryBoard::is_draw(Player<char>* player) {
-    return (n_moves >= 9) && !is_win(player) && !is_lose(player); // Draw if all cells are filled
+
+bool MemoryBoard::is_lose(Player<char>* player) {
+    char opp = (player->get_symbol() == 'X') ? 'O' : 'X';
+    Player<char> temp("", opp, PlayerType::HUMAN);
+    return is_win(&temp);
 }
+
+bool MemoryBoard::is_draw(Player<char>* player) {
+    return (n_moves >= 9) && !is_win(player) && !is_lose(player);
+}
+
 bool MemoryBoard::game_is_over(Player<char>* player) {
-    return is_win(player) || is_lose(player) || is_draw(player);
+    bool over = is_win(player) || is_lose(player) || is_draw(player);
+    if(over) { 
+        reveal_all(); 
+        display_final_board(); 
+    }
+    return over;
 }
 
 void MemoryBoard::reveal_all() {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    for(int i = 0; i < 3; i++) 
+        for(int j = 0; j < 3; j++) 
             revealed[i][j] = true;
-        }
-    }
 }
 
 void MemoryBoard::hide_all() {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    for(int i = 0; i < 3; i++) 
+        for(int j = 0; j < 3; j++) 
             revealed[i][j] = false;
-        }
-    }
-}
-bool MemoryBoard::is_revealed(int x, int y) const {
-    return revealed[x][y];
-}
-void MemoryBoard::reveal_position(int x, int y) {
-    revealed[x][y] = true;
 }
 
-//reveal current board state
-void MemoryBoard::display_memory_board() const {
-    cout << "\nCurrent Memory Board:\n";
-    cout << "  0   1   2\n";
-    for (int i = 0; i < 3; i++) {
-        cout << i << " ";
-        for (int j = 0; j < 3; j++) {
-            if (revealed[i][j]) {
-                cout << board[i][j];
-            }
-            else {
-                cout << "?";
-            }
-            if (j < 2) cout << " | ";
-        }
-        cout << endl;
-        if (i < 2) cout << "  ---------\n";
-    }
-    cout << endl;
+bool MemoryBoard::is_revealed(int r, int c) const {
+    return (r >= 0 && r < 3 && c >= 0 && c < 3) ? revealed[r][c] : false;
 }
 
-MemoryTicTacToeUI::MemoryTicTacToeUI() : UI<char>("Welcome to Memory Tic-Tac-Toe!", 13) {}
+void MemoryBoard::reveal_position(int r, int c) {
+    if(r >= 0 && r < 3 && c >= 0 && c < 3) 
+        revealed[r][c] = true;
+}
+
+void MemoryBoard::display_board() const {
+    cout << "\nCurrent Memory Board:\n" ;
+    cout <<"  0   1   2\n ";
+     cout <<"-------------\n";
+    for(int r = 0; r < 3; r++) {
+        cout << r << " "; 
+        for(int c = 0; c < 3; c++) 
+            cout << "| ? "; 
+        cout << "|\n";
+        if(r < 2) 
+            cout << "  -------------\n";
+    }
+    cout << "  -------------\n\n";
+}
+
+void MemoryBoard::display_final_board() const {
+    cout << "\n=== FINAL RESULT ===\n";
+     cout<<"  0   1   2\n";
+     cout<<"  -------------\n";
+    for(int r = 0; r < 3; r++) {
+        cout << r << " "; 
+        for(int c = 0; c < 3; c++) {
+            cout << "| " << (board[r][c] == ' ' ? ' ' : board[r][c]) << " ";
+        } 
+        cout << "|\n"; 
+        if(r < 2) 
+            cout << "  -------------\n";
+    }
+    cout << "  -------------\n\n";
+}
+
+char MemoryBoard::get_current_player() const { 
+    return currentPlayer; 
+}
+
+char MemoryBoard::get_cell(int r, int c) const {
+    return (r >= 0 && r < 3 && c >= 0 && c < 3) ? board[r][c] : ' ';
+}
+
+///////////////////////////////////////////////////
+
+MemoryTicTacToeUI::MemoryTicTacToeUI() : UI<char>("Memory Tic-Tac-Toe", 3) {}
+
 Move<char>* MemoryTicTacToeUI::get_move(Player<char>* player) {
-    char symbol = player->get_symbol();
+    char sym = player->get_symbol();
     auto board_ptr = dynamic_cast<MemoryBoard*>(player->get_board_ptr());
-    if (player->get_type() == PlayerType::HUMAN) {
-        int x, y;
-        while (true) {
-            cout << "\n" << player->get_name() << "'s turn (symbol: " << symbol << ")\n";
-            
-            cout << "Enter position to reveal (row column): ";
-            cin >> x >> y;
-            if (x < 0 || x >= 3 || y < 0 || y >= 3) {
-                cout << "Invalid coordinates! Please enter numbers between 0 and 2.\n";
+
+    if(player->get_type() == PlayerType::HUMAN) {
+        int r, c; 
+        cout << "\n" << player->get_name() << " (" << sym << ") turn:\n";
+        board_ptr->display_board();
+        while(1) {
+            cout << "Enter row col (0-2): "; 
+            cin >> r >> c;
+            if(cin.fail()) {
+                cin.clear(); 
+                cin.ignore(1000, '\n'); 
+                cout << "Invalid!\n"; 
                 continue;
             }
-            if (board_matrix[x][y] != ' ') {
-                cout << "That position is already revealed! Please choose a hidden cell.\n";
+            if(r < 0 || r > 2 || c < 0 || c > 2) {
+                cout << "0-2 only!\n"; 
+                continue;
+            }
+            if(board_ptr->get_cell(r, c) != ' ') {
+                cout << "Taken!\n"; 
                 continue;
             }
             break;
         }
-        return new Move<char>(x, y, symbol);
-    }
-    else {
-        // Computer player - random move
-        vector<pair<int, int>> hidden_cells;
-        // Find all hidden cells
-        auto board_matrix = board_ptr->get_board_matrix();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board_matrix[i][j] == ' ') {
-                    hidden_cells.push_back({ i, j });
-                }
-            }
-        }
-        if (!hidden_cells.empty()) {
-            auto move_pos = hidden_cells[rand() % hidden_cells.size()];
-            cout << player->get_name() << " (Computer) reveals position (" << move_pos.first << "," << move_pos.second << ")\n";
-            return new Move<char>(move_pos.first, move_pos.second, symbol);
-        }
-        return new Move<char>(0, 0, symbol);
+        return new Move<char>(r, c, sym);
+    } else {
+        vector<pair<int, int>> empty;
+        for(int i = 0; i < 3; i++) 
+            for(int j = 0; j < 3; j++)
+                if(board_ptr->get_cell(i, j) == ' ') 
+                    empty.push_back({i, j});
+        if(empty.empty()) 
+            return new Move<char>(0, 0, sym);
+        int idx = rand() % empty.size();
+        int r = empty[idx].first, c = empty[idx].second;
+        cout << player->get_name() << " chooses (" << r << "," << c << ")\n";
+        return new Move<char>(r, c, sym);
     }
 }
-Player<char>* MemoryTicTacToeUI::create_player(std::string& name, char symbol, PlayerType type) {
-    return new Player<char>(name, symbol, type);
-};
+
+Player<char>* MemoryTicTacToeUI::create_player(string& n, char s, PlayerType t) {
+    return new Player<char>(n, s, t);
+}
+
+void MemoryTicTacToeUI::display_board_matrix(const vector<vector<char>>& m) const {
+    cout << "\n";
+}
